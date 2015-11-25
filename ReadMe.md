@@ -2,15 +2,15 @@ OPIS PROJEKTNOG ZADATKA
 
 Za projektni zadatak smo odlučili napraviti web aplikaciju za igranje kartaške igre tresete.
  Aplikaciji ce korisnici pristupati kroz nekoliko faza.
- 1.	Faza
+ 
 Prijava za koristiti aplikaciju korisnici se mogu prijaviti kao gost ili mogu napraviti korisnički račun 
 s korisničkim računom dolazi rejting igraća koji se mijenja ovisno o tome koliko je igrač uspješan.
-2.	Faza
-Nakon prve faze korisnik dolazi do faze u kojoj može odabrati sobu za igru kada uđe 
+
+Nakon prijavljivanja korisnik dolazi do faze u kojoj može odabrati sobu za igru kada uđe 
 u sobu igrač mora čekati da se soba napuni 4 ili 2 igraća.
-3.	Faza
+
 Aktivan faza igrač partiju i može koristiti chat za komunikaciju s drugim 
-igračima po završetku partije dobije opciju da igra revanš ili da se vrati u 2. Fazu.
+igračima po završetku partije dobije opciju da igra revanš ili da se vrati u odabir soba.
 
 
 Koristiti ćemo signalR library za komunikaciju klijenta i poslužitelja. SignalR library
@@ -23,7 +23,7 @@ jednostavnijih, dobro dočarava svu moć i prednost objektno orijentiranog jezik
 MVC obrazac odvaja prezentacijski, logički i podatkovni dio aplikacije.
 
 Podijelili smo si zadatak i 4 djela:
-1.Login i registracija
-2.Pronalazak i ulazak u sobu
-3.Chat
-4. Aktivni dio igre
+-Login i registracija
+-Pronalazak i ulazak u sobu
+-Chat
+-Aktivni dio igre
