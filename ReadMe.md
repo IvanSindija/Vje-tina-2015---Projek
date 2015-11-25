@@ -1,26 +1,26 @@
 OPIS PROJEKTNOG ZADATKA
 
-Za projektni zadatak smo odluèili napraviti web aplikaciju za igranje kartaške igre tresete.
+Za projektni zadatak smo odluÄili napraviti web aplikaciju za igranje kartaÅ¡ke igre tresete.
  Aplikaciji ce korisnici pristupati kroz nekoliko faza.
-1.	Faza
-Prijava za koristiti aplikaciju korisnici se mogu prijaviti kao gost ili mogu napraviti korisnièki raèun 
-s korisnièkim raèunom dolazi rejting igraæa koji se mijenja ovisno o tome koliko je igraè uspješan.
+ 1.	Faza
+Prijava za koristiti aplikaciju korisnici se mogu prijaviti kao gost ili mogu napraviti korisniÄki raÄun 
+s korisniÄkim raÄunom dolazi rejting igraÄ‡a koji se mijenja ovisno o tome koliko je igraÄ uspjeÅ¡an.
 2.	Faza
-Nakon prve faze korisnik dolazi do faze u kojoj moe odabrati sobu za igru kada uğe 
-u sobu igraè mora èekati da se soba napuni 4 ili 2 igraæa.
+Nakon prve faze korisnik dolazi do faze u kojoj moÅ¾e odabrati sobu za igru kada uÄ‘e 
+u sobu igraÄ mora Äekati da se soba napuni 4 ili 2 igraÄ‡a.
 3.	Faza
-Aktivan faza igraè partiju i moe koristiti chat za komunikaciju s drugim 
-igraèima po završetku partije dobije opciju da igra revanš ili da se vrati u 2. Fazu.
+Aktivan faza igraÄ partiju i moÅ¾e koristiti chat za komunikaciju s drugim 
+igraÄima po zavrÅ¡etku partije dobije opciju da igra revanÅ¡ ili da se vrati u 2. Fazu.
 
 
-Koristiti æemo signalR library za komunikaciju klijenta i posluitelja. SignalR library
- omoguæuje komunikaciju u oba smjera klijent->posluitelj i posluitelj-> klijent to radi pomoæu WebSockets .
+Koristiti Ä‡emo signalR library za komunikaciju klijenta i posluÅ¾itelja. SignalR library
+ omoguÄ‡uje komunikaciju u oba smjera klijent->posluÅ¾itelj i posluÅ¾itelj-> klijent to radi pomoÄ‡u WebSockets .
  
-Naš æe programski sustav biti povezan s bazom podataka u kojoj æe biti spremljeni podatci korisnika i njihov osobni rejting.
- Rejting ce se smanjivati poveæavati ovisno o pobjedama/porazima.
-Koristi æemo se oblikovnim obrascem MVC (Model – View – Controller) koji, iako je jedan od 
-jednostavnijih, dobro doèarava svu moæ i prednost objektno orijentiranog jezika.
-MVC obrazac odvaja prezentacijski, logièki i podatkovni dio aplikacije.
+NaÅ¡ Ä‡e programski sustav biti povezan s bazom podataka u kojoj Ä‡e biti spremljeni podatci korisnika i njihov osobni rejting.
+ Rejting ce se smanjivati poveÄ‡avati ovisno o pobjedama/porazima.
+Koristi Ä‡emo se oblikovnim obrascem MVC (Model â€“ View â€“ Controller) koji, iako je jedan od 
+jednostavnijih, dobro doÄarava svu moÄ‡ i prednost objektno orijentiranog jezika.
+MVC obrazac odvaja prezentacijski, logiÄki i podatkovni dio aplikacije.
 
 Podijelili smo si zadatak i 4 djela:
 1.Login i registracija
