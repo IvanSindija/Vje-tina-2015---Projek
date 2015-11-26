@@ -8,7 +8,7 @@ Korisnik se može prijaviti kao gost ili može napraviti korisnički račun.
 S korisničkim računom dolazi rejting igrača koji se mijenja ovisno o tome koliko je igrač uspješan.
 
 Nakon prijavljivanja korisnik dolazi do sučelja gdje može birati kakvu vrstu igre želi igrati: 
-1) Protiv drugih igrača
+1) Protiv drugih igrača:
 Igrač će ući u sobu gdje će čekati da se skupi dovoljno igrača za početak partije. Minimalan broj igrača potreban za početak partije je 4.
 Igrači igraju u timovima (2 na 2). Igrač koji je stvorio sobu može birati do koliko bodova će se igrati (opcije su 21, 31 i 41 bod).
 Tim koji prvi ostvari traženi prag bodova je pobjednik. Ako oba tima pređu prag bodova, pobjednik je tim koji ima više bodova. Inače je nerješeno.
@@ -16,7 +16,7 @@ Igračima koji su u pobjedničkom timu podiže se rejting. Ako je nerješeno svi
 Za vrijeme igranja igrači mogu koristiti chat za međusobnu komunikaciju.
 Po završetku igre igrači mogu birati žele li revanš ili će se vratiti u odabir soba. Revanš će nastupiti samo ako sva 4 igrača izraze želju za time.
 
-2) Protiv računala
+2) Protiv računala:
 Ova opcija će biti u svrhu vježbanja igre protiv računala. Igrač ne dobiva nikakav rejting niti bodove. 
 Za razliku od opcije "Igranje protiv drugih igrača" gdje se igra u parovima, u ovoj opciji igrač će igrati protiv računala 1 na 1.
 
