@@ -149,7 +149,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\MultiplayerHub.cs" />
-    <Compile Include="Hubs\SinglePlayerHub.cs" />
     <Compile Include="Models\Igrac.cs" />
     <Compile Include="Models\Karta.cs" />
     <Compile Include="Models\KorisnikModel.cs" />
@@ -198,9 +197,14 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\GlavniIzbornik.cshtml" />
     <Content Include="Views\Home\SinglePlayer.cshtml" />
+    <Content Include="Views\Home\Pravila.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\Bastone\" />
+    <Folder Include="Images\Dinare\" />
+    <Folder Include="Images\Kupe\" />
+    <Folder Include="Images\Spade\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

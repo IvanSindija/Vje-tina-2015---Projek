@@ -14,9 +14,6 @@ namespace Treseta.Models
     public class Room
     {
         public string imeSobe { get; set; }
-        public Igrac igrac1 { get; set; }
-        public Igrac igrac2 { get; set; }
-        public Igrac igrac3 { get; set; }
-        public Igrac igrac4 { get; set; }
+        public Igrac[] igraci = new Igrac[4];
     }
 }
