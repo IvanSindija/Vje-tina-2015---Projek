@@ -153,6 +153,7 @@
     <Compile Include="Models\Karta.cs" />
     <Compile Include="Models\KorisnikModel.cs" />
     <Compile Include="Models\Room.cs" />
+    <Compile Include="Models\SingletonListaSoba.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

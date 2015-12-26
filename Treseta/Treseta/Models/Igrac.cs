@@ -1,7 +1,8 @@
 ﻿namespace Treseta.Models
 {
-    public class Igrac : KorisnikModel
+    public class Igrac
     {
-        //nisan siguran jos kako cu ovo srediti
+        public string imeKorisnika { get; set; }
+        public string connectioId { get; set; }
     }
 }
