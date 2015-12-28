@@ -9,7 +9,6 @@ namespace Treseta.Controllers
 {
     public class HomeController : Controller
     {
-        List<Room> sobe = SingletonListaSoba.dohvatiListuSoba();
 
         public ActionResult Index()
         {
@@ -23,16 +22,14 @@ namespace Treseta.Controllers
         [HttpPost]
         public ActionResult GlavniIzbornik(KorisnikModel korisnik)
         {
-            sobe.Add( new Room() { imeSobe = "prva soba" , brojIgraca =0}  );
-            sobe.Add(new Room() { imeSobe = "druga soba", brojIgraca = 0 });
-            sobe.Add(new Room() { imeSobe = "treća soba", brojIgraca = 0 });
             //povezi se s bazom
             //provjeri dali postoji u bazi korisnik
             if (korisnik.userName == null || korisnik.userName == String.Empty)//pazi za null vrjednosti sjeba ce te
                 return View("~/Views/Home/Index.cshtml");
-            if (korisnik.userName.Equals("ja"))//izvede se ako postoji korisnik
+            if (true)//izvede se ako postoji korisnik
             {
-                ViewData["korisnik"] = "ovo je test prjenosa";
+                List<Room> sobe = SingletonListaSoba.dohvatiListuSoba();
+                ViewData["korisnik"] = korisnik.userName;// nemoj ovo prominiti
                 return View(sobe); //omogucava prikaz liste soba u vievu izbornika
             }
             else
@@ -51,14 +48,17 @@ namespace Treseta.Controllers
             return View();
         }
 
-        public ActionResult Partija()
+        public ActionResult Partija(string imeSobe, string korisnickoIme)
         {
+            ViewData["imeSobe"] = imeSobe;
+            ViewData["korisnickoIme"] = korisnickoIme;
             return View();
         }
 
-        public ActionResult Room(string imeSobe)
+        public ActionResult Room(string imeSobe , string korisnickoIme)
         {
             ViewData["imeSobe"] = imeSobe;
+            ViewData["korisnickoIme"] = korisnickoIme;
             return View();
         }
 

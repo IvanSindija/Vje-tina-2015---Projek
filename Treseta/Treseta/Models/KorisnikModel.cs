@@ -12,6 +12,5 @@ namespace Treseta.Models
     {
         public string userName { get; set; }
         public string password { get; set; }
-        public int rejting { get; set; }
     }
 }

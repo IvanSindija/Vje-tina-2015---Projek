@@ -1,6 +1,7 @@
 ﻿@model List<Treseta.Models.Room>
 
 <h2>GlavniIzbornik</h2>
+@ViewData["korisnik"]
 <div>
     <button onclick="location.href='@Url.Action("Pravila", "Home", "")'">pravila</button>
     </div>
@@ -11,7 +12,9 @@
 <div>
     @foreach (var item in Model)
     {
-        <p onclick="location.href='@Url.Action("Room", "Home",new { imeSobe = @item.imeSobe })'">@item.imeSobe</p>
+        <div>
+            <label onclick="location.href='@Url.Action("Partija", "Home",new { imeSobe = @item.imeSobe, korisnickoIme = @ViewData["korisnik"]})'">@item.imeSobe</label>
+        </div>
     }
 </div>
 <div>

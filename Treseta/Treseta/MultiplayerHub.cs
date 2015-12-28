@@ -12,59 +12,51 @@ namespace Treseta.Hubs
     /// </summary>
     public class MultiplayerHub : Hub
     {
-        List<Room> sobe = SingletonListaSoba.dohvatiListuSoba();
-        public void Connect(string userName, string imeSobe)
+        private List<Room> sobe;
+
+        public MultiplayerHub()
+        {
+            if(sobe==null)
+                sobe = SingletonListaSoba.dohvatiListuSoba();
+        }
+
+        public void joinRoom(string userName, string imeSobe)
         {
             var id = Context.ConnectionId;
+        
+            Room sobaJoin = sobe.Find(x => x.imeSobe.Equals(imeSobe));//dohvatim sobu u koju igrac zali uci
 
-            bool igracJeUsobi = false;
-            foreach (Room soba in sobe)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    if (soba.igraci[i].connectioId == id)
-                    {
-                        igracJeUsobi = true;
-                    }
-                }
-            }
-            Room sobaJoin = sobe.Find(x => x.imeSobe == imeSobe);//dohvatim sobu u koju igrac zali uci
-            if (!igracJeUsobi)
-            {
-                sobaJoin.brojIgraca++;
-                sobaJoin.igraci[sobaJoin.brojIgraca] = new Igrac() { imeKorisnika = userName };
-            }
+            sobaJoin.igraci[sobaJoin.brojIgraca] = new Igrac() { imeKorisnika = userName , connectioId = id};
+            sobaJoin.brojIgraca++;
 
-            // send to all except caller client
-            // send to all except caller client
             for (int i = 0; i < sobaJoin.brojIgraca; i++)
-                Clients.Client(sobaJoin.igraci[i].connectioId).onNewUserConnected(id, userName);
+                Clients.Client(sobaJoin.igraci[i].connectioId).onNewUserConnected(userName);
 
         }
 
 
 
-        public void SendMessage(string korisnik, string soba, string poruka)
+        public void sendMessage(string korisnik, string soba, string poruka)
         {
-
-            Room sobaGrupe = sobe.Find(x => x.imeSobe == soba);//dohvatim sobu u kojoj je igrac
+            
+            Room sobaGrupe = sobe.Find(x => x.imeSobe.Equals(soba));//dohvatim sobu u kojoj je igrac
             // send to korisnici u sobi
             for (int i = 0; i < sobaGrupe.brojIgraca; i++)
-                Clients.Client(sobaGrupe.igraci[i].connectioId).sendMessage(korisnik, poruka);
+                Clients.Client(sobaGrupe.igraci[i].connectioId).addNewMessageToPage(korisnik, poruka);
 
         }
 
         public override System.Threading.Tasks.Task OnDisconnected(bool x)
         {
             var otisao = Context.ConnectionId;
-            Room sobaOdlaska=null;
-            string userName=null;
+            Room sobaOdlaska = null;
+            string userName = null;
             foreach (Room soba in sobe)
             {
                 int j = 0;
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < soba.brojIgraca; i++)
                 {
-                    if (soba.igraci[i].connectioId == otisao)
+                    if (soba.igraci[i].connectioId.Equals(otisao))
                     {
                         sobaOdlaska = soba;//dohvatim sobu u koju igrac zali uci
                         userName = sobaOdlaska.igraci[i].imeKorisnika;

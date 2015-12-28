@@ -12,6 +12,9 @@ namespace Treseta.Models
         private SingletonListaSoba()
         {
             sobe = new List<Room>();
+            sobe.Add(new Room() { imeSobe = "prva soba", brojIgraca = 0 });
+            sobe.Add(new Room() { imeSobe = "druga soba", brojIgraca = 0 });
+            sobe.Add(new Room() { imeSobe = "treća soba", brojIgraca = 0 });
         }
         public static List<Room> dohvatiListuSoba()
         {

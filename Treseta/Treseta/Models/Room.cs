@@ -15,6 +15,6 @@ namespace Treseta.Models
     {
         public string imeSobe { get; set; }
         public Igrac[] igraci = new Igrac[4];
-        public int brojIgraca { get { return brojIgraca} set{ if (value >= 0 && value < 5) brojIgraca = value;  } }
+        public int brojIgraca { get ; set;  }
     }
 }
