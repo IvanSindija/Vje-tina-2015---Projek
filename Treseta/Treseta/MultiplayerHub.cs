@@ -30,7 +30,13 @@ namespace Treseta.Hubs
             sobaJoin.brojIgraca++;
 
             for (int i = 0; i < sobaJoin.brojIgraca; i++)
-                Clients.Client(sobaJoin.igraci[i].connectioId).onNewUserConnected(userName);
+                Clients.Client(sobaJoin.igraci[i].connectioId).onNewUserConnected(userName , sobaJoin.brojIgraca.ToString());
+            //ako je soba puna pocne igra
+            if (sobaJoin.brojIgraca == 4)
+            {
+                for (int i = 0; i < sobaJoin.brojIgraca; i++)
+                    Clients.Client(sobaJoin.igraci[i].connectioId).zapocniIgru();
+            }
 
         }
 
@@ -58,8 +64,13 @@ namespace Treseta.Hubs
                 {
                     if (soba.igraci[i].connectioId.Equals(otisao))
                     {
-                        sobaOdlaska = soba;//dohvatim sobu u koju igrac zali uci
+                        sobaOdlaska = soba;//dohvatim sobu iz koje odlazi
                         userName = sobaOdlaska.igraci[i].imeKorisnika;
+                        if(sobaOdlaska.brojIgraca==4)
+                            for(int e=0; e < 4; e++)
+                            {
+                                Clients.Client(sobaOdlaska.igraci[e].connectioId).pizda(userName);
+                            }
                         soba.brojIgraca--;
                         j++;
                     }
@@ -69,7 +80,7 @@ namespace Treseta.Hubs
 
             // send to all except caller client
             for (int i = 0; i < sobaOdlaska.brojIgraca; i++)
-                Clients.Client(sobaOdlaska.igraci[i].connectioId).onUserDisconnected(otisao, userName);
+                Clients.Client(sobaOdlaska.igraci[i].connectioId).onUserDisconnected(userName);
 
 
             return base.OnDisconnected(x);

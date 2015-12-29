@@ -1,12 +1,14 @@
-﻿@ViewData["imeSobe"]
+﻿<h1>@ViewData["imeSobe"]</h1>
 <div>
-    <canvas id="myCanvas" width="1000" height="600" style="border:1px solid #000000;"></canvas>
-    <h3>@ViewData["korisnickoIme"]</h3>
+    <h3 id="igrac3">igrac3 </h3>
+    <label id="igrac2">igrac2</label>
+    <canvas id="myCanvas" width="1100" height="700" style="border:1px solid #000000;"></canvas>
+    <label id="igrac4">igrac4</label>
+    <h3 id="igrac1">@ViewData["korisnickoIme"]</h3>
 </div>
 <div class="container">
     <input type="text" id="message" />
     <input type="button" id="sendmessage" value="Send" />
-    <input type="button" id="kreni" value="kreni" />
 </div>
 
 <div id="chatBox" style="overflow-y: scroll; height:400px; border:1px solid #000000;">
@@ -34,17 +36,36 @@
             var offsetX = canvasOffset.left;
             var offsetY = canvasOffset.top;
 
+            //korisnik napustio usrid partije
+            chat.client.pizda = function (name) {
+                alert(name+"je napustio partiju");
+                //vrati ih u glavni izborink!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            };
+
+            //servaer javlja da je korisnik napustio sobu
+            chat.client.onUserDisconnected = function (name,brojIgraca) {
+                $('#discussion').prepend('<li><strong>' + htmlEncode(name)
+                   + '</strong>: ' + htmlEncode(" je napustio sobu") + '</li>');
+                $('#igrac'+brojIgraca).val("otisao");
+            };
+
             //servaer javlja da se korisnik spojio u sobu
-            chat.client.onNewUserConnected = function (name) {
-                $('#discussion').append('<li><strong>' + htmlEncode(name)
+            chat.client.onNewUserConnected = function (name , brojIgraca) {
+                $('#discussion').prepend('<li><strong>' + htmlEncode(name)
                    + '</strong>: ' + htmlEncode(" se pridruzio sobi") + '</li>');
+                $('#igrac'+brojIgraca).text(name);
             };
 
             // Create a function that the hub can call back to display messages.
             chat.client.addNewMessageToPage = function (name, message) {
                 // Add the message to the page.
-                $('#discussion').append('<li><strong>' + htmlEncode(name)
+                $('#discussion').prepend('<li><strong>' + htmlEncode(name)
                     + '</strong>: ' + htmlEncode(message) + '</li>');
+            };
+
+            chat.client.zapocniIgru = function(){
+                for(i=0;i<10;i++)
+                    ctx.fillRect(100+(i*100),590,70,100);
             };
             // Start the connection.
             $.connection.hub.start().done(function () {
@@ -52,10 +73,6 @@
 
                 //spojin se u sobu
                 chat.server.joinRoom(name , imeSobe);
-                //iscrteti na platnu slike
-                for(i =1; i<11;i++){
-                    ctx.fillRect(10*i,10*i,30,30);
-                };
 
                 $('#sendmessage').click(function () {
                     // Call the Send method on the hub.
