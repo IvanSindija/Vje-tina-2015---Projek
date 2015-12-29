@@ -1,10 +1,10 @@
 ﻿<h1>@ViewData["imeSobe"]</h1>
 <div>
-    <h3 id="igrac3">igrac3 </h3>
-    <label id="igrac2">igrac2</label>
-    <canvas id="myCanvas" width="1100" height="700" style="border:1px solid #000000;"></canvas>
-    <label id="igrac4">igrac4</label>
-    <h3 id="igrac1">@ViewData["korisnickoIme"]</h3>
+    <h3 id="igrac2">igrac3 </h3>
+    <label id="igrac1">igrac2</label>
+    <canvas id="myCanvas" width="1000" height="700" style="border:1px solid #000000;"></canvas>
+    <label id="igrac3">igrac4</label>
+    <h3 id="igrac0">@ViewData["korisnickoIme"]</h3>
 </div>
 <div class="container">
     <input type="text" id="message" />
@@ -36,6 +36,16 @@
             var offsetX = canvasOffset.left;
             var offsetY = canvasOffset.top;
 
+            //dobiveni podatci o drubim igracima
+            chat.client.podatciOIgracima = function(name1 , poz1, name2, poz2, name3, poz3){
+                if(name1 != null)
+                    $('#igrac'+poz1).text(name1.imeKorisnika);
+                if(name2 != null)
+                    $('#igrac'+poz2).text(name2.imeKorisnika);
+                if(name3 != null)
+                    $('#igrac'+poz3).text(name3.imeKorisnika);
+            }
+
             //korisnik napustio usrid partije
             chat.client.pizda = function (name) {
                 alert(name+"je napustio partiju");
@@ -46,7 +56,7 @@
             chat.client.onUserDisconnected = function (name,brojIgraca) {
                 $('#discussion').prepend('<li><strong>' + htmlEncode(name)
                    + '</strong>: ' + htmlEncode(" je napustio sobu") + '</li>');
-                $('#igrac'+brojIgraca).val("otisao");
+                $('#igrac'+brojIgraca).text("slobodno mjesto");
             };
 
             //servaer javlja da se korisnik spojio u sobu
@@ -63,9 +73,13 @@
                     + '</strong>: ' + htmlEncode(message) + '</li>');
             };
 
-            chat.client.zapocniIgru = function(){
-                for(i=0;i<10;i++)
-                    ctx.fillRect(100+(i*100),590,70,100);
+            chat.client.zapocniIgru = function(ruka){
+                for(i=0;i<10;i++){
+                    var karta = ruka[i];
+                    var img = new Image();
+                    img.src = karta.pathSlike;
+                    ctx.drawImage(img ,parseInt(karta.xPoz),590,parseInt(karta.sirina),parseInt(karta.visina));
+                }
             };
             // Start the connection.
             $.connection.hub.start().done(function () {

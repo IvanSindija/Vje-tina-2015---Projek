@@ -15,6 +15,15 @@ namespace Treseta.Controllers
             KorisnikModel korisnk = new KorisnikModel();
             return View();
         }
+
+        //bude pozvan u trenutcima kad se trba vratiti na glavni izbornik iz partije
+        [HttpGet]
+        public ActionResult GlavniIzbornik(string korisnik)
+        {
+            List<Room> sobe = SingletonListaSoba.dohvatiListuSoba();
+            ViewData["korisnik"] = korisnik;// nemoj ovo prominiti
+            return View(sobe); //omogucava prikaz liste soba u vievu izbornika
+        }
         /// <summary>
         /// koristi se za login provjerava dali postoji korisni
         /// </summary>
@@ -51,14 +60,7 @@ namespace Treseta.Controllers
         public ActionResult Partija(string imeSobe, string korisnickoIme)
         {
             ViewData["imeSobe"] = imeSobe;
-            ViewData["korisnickoIme"] = korisnickoIme;
-            return View();
-        }
-
-        public ActionResult Room(string imeSobe , string korisnickoIme)
-        {
-            ViewData["imeSobe"] = imeSobe;
-            ViewData["korisnickoIme"] = korisnickoIme;
+            ViewData["korisnickoIme"] = korisnickoIme;     
             return View();
         }
 

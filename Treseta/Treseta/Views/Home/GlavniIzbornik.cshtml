@@ -4,7 +4,7 @@
 @ViewData["korisnik"]
 <div>
     <button onclick="location.href='@Url.Action("Pravila", "Home", "")'">pravila</button>
-    </div>
+</div>
 <div>
     <button onclick="location.href='@Url.Action("singlePlayer", "Home", "")'">Single Player</button>
 
@@ -13,7 +13,10 @@
     @foreach (var item in Model)
     {
         <div>
-            <label onclick="location.href='@Url.Action("Partija", "Home",new { imeSobe = @item.imeSobe, korisnickoIme = @ViewData["korisnik"]})'">@item.imeSobe</label>
+            @if (item.brojIgraca < 4)
+            {
+                <label onclick="location.href='@Url.Action("Partija", "Home", new { imeSobe = @item.imeSobe, korisnickoIme = @ViewData["korisnik"] })'">@item.imeSobe - Igraca u sobi: @item.brojIgraca</label>
+            }
         </div>
     }
 </div>

@@ -14,6 +14,9 @@ namespace Treseta.Models
         public int snaga { get; set; }//trica = 10 cetvorka = 1
         public int bodovi { get; set; }//u belama as = 3
         public string pathSlike { get; set; } //put do slike
+        public int xPoz { get; set; }
+        public int sirina { get; set; }
+        public int visina { get; set; }
         public Karta(string ime, Zvanje zvanje, int snaga, int bodovi, string pathSlike)
         {
             this.ime = ime;
