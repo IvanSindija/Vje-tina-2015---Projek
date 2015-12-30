@@ -24,6 +24,8 @@ namespace Treseta.Models
             this.snaga = snaga;
             this.bodovi = bodovi;
             this.pathSlike = pathSlike;
+            sirina = 80;
+            visina = 100;
         }
 
         public int CompareTo(object obj)

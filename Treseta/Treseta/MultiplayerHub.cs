@@ -38,7 +38,7 @@ namespace Treseta.Hubs
             //ako je soba puna pocne igraca
 
             sobaJoin.brojIgraca++;//broj igraca i koristim za saviti sljedeceg igraca
-            if (true)//zapocni kad je puna soba
+            if (sobaJoin.brojIgraca==4)//zapocni kad je puna soba
             {
                 Spil spil = new Spil();
                 for (int i = 0; i < sobaJoin.brojIgraca; i++)
@@ -47,9 +47,7 @@ namespace Treseta.Hubs
                     ruka.Sort();
                     for(int j=0; j<10; j++)
                     {
-                        ruka.ElementAt(j).xPoz = 50 + j*90;
-                        ruka.ElementAt(j).sirina = 80;
-                        ruka.ElementAt(j).visina = 100;
+                        ruka.ElementAt(j).xPoz = 80 + j*90;
                     }
                     Clients.Client(sobaJoin.igraci[i].connectioId).zapocniIgru(ruka);
                 }
@@ -84,16 +82,22 @@ namespace Treseta.Hubs
                         sobaOdlaska = soba;//dohvatim sobu iz koje odlazi
                         userName = sobaOdlaska.igraci[i].imeKorisnika;
                         if (sobaOdlaska.brojIgraca == 4)
+                        {
                             for (int e = 0; e < 4; e++)
                             {
                                 Clients.Client(sobaOdlaska.igraci[e].connectioId).pizda(userName);
                                 sobaOdlaska.igraci[e] = null;
                                 sobaOdlaska.brojIgraca = 0;
+                                j = 1;
                             }
+                            break;
+                        }
                         soba.brojIgraca--;
-                        j++;
+                        j = 1;
+                        soba.igraci[i] = null;
                     }
-                    soba.igraci[i] = soba.igraci[i + j];
+                    if (j == 1) break;
+           
                 }
             }
 
