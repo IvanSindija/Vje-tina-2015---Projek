@@ -49,6 +49,7 @@ namespace Treseta.Hubs
                     {
                         ruka.ElementAt(j).xPoz = 80 + j*90;
                     }
+                    sobaJoin.igraci[i].mojeKarte = ruka;
                     Clients.Client(sobaJoin.igraci[i].connectioId).zapocniIgru(ruka);
                 }
             }

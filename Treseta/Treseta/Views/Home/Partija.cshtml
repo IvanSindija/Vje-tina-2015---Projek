@@ -31,11 +31,6 @@
             var c=document.getElementById("myCanvas");
             var ctx=c.getContext("2d");
 
-            //mozda budem koristio za detekciju pozicije misa na platnu
-            var canvasOffset = $("#myCanvas").offset();
-            var offsetX = canvasOffset.left;
-            var offsetY = canvasOffset.top;
-
             //dobiveni podatci o drubim igracima
             chat.client.podatciOIgracima = function(name1 , poz1, name2, poz2, name3, poz3){
                 if(name1 != null)
@@ -73,6 +68,7 @@
                     + '</strong>: ' + htmlEncode(message) + '</li>');
             };
 
+            //dobije 10 karata i iscrta ih na platno
             chat.client.zapocniIgru = function(ruka){
                 var imgs = [];
                 var imagesOK=0;
@@ -96,6 +92,13 @@
 
                 //spojin se u sobu
                 chat.server.joinRoom(name , imeSobe);
+
+                $("#myCanvas").click(function(evt) {
+                    var  mouseX = parseInt(evt.clientX - c.offsetLeft);
+                    var mouseY = parseInt(evt.clientY-c.offsetTop + window.pageYOffset);
+                    var message = 'Mouse position: ' + mouseX.toString() + ',' + mouseY.toString();
+                    alert(message);
+                });
 
                 $('#sendmessage').click(function () {
                     // Call the Send method on the hub.
