@@ -35,5 +35,14 @@ namespace Treseta.Models
                 return snaga.CompareTo(karta2.snaga);
             return zvanje.CompareTo(karta2.zvanje);
         }
+
+        internal Karta tkoJeJaci(Karta karta)
+        {
+            if (this.zvanje != karta.zvanje)
+                return this;
+            if (karta.snaga > this.snaga)
+                return karta;
+            return this;
+        }
     }
 }
