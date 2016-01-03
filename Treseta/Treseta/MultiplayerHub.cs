@@ -19,6 +19,19 @@ namespace Treseta.Hubs
             if (sobe == null)
                 sobe = SingletonListaSoba.dohvatiListuSoba();
         }
+        //odredi koja je bacena karta iz kordinate klika
+        private Karta getKliknutaKarta(Room sobaIgre ,int mouseX)
+        {
+            for (int i = 0; i < sobaIgre.krugIgre; i++)
+            {
+                Karta temp = sobaIgre.igraci[sobaIgre.igracNaPotezu].mojeKarte.ElementAt(i);//karta za provjeru
+                if (temp.xPoz < mouseX && (temp.xPoz + temp.sirina) > mouseX)//kliknuta je ova karta
+                {
+                    return temp;
+                }
+            }
+            return null;
+        }
 
         public void cardClick(int mouseX, int mouseY, string imeSobe)
         {
@@ -26,23 +39,11 @@ namespace Treseta.Hubs
             var id = Context.ConnectionId;
             if (sobaIgre.igraci[sobaIgre.igracNaPotezu].connectioId != id)//igrac koji nije na potezu je kliknuo na svoje karte
             {
-                Clients.Client(id).upzorenje("Nisi na potezu");
+                Clients.Client(id).upozorenje("Nisi na potezu");
                 return;
             }
-            //provjeriti koja je karta kliknuta
-            //ako nije kliknuta karta nego platno ne uciniti nista
-            //logika igre
-            //javiti svima koja je karta kliknuta i tko ju je kliknuo, a klikacu javiti koja je pozicija kliknute karte i koja je karta
-            Karta kliknutaKarta = null;
-            for (int i = 0; i < 10; i++)
-            {
-                Karta temp = sobaIgre.igraci[sobaIgre.igracNaPotezu].mojeKarte.ElementAt(i);//karta za provjeru
-                if (temp.xPoz < mouseX && (temp.xPoz + temp.sirina) > mouseX)//kliknuta je ova karta
-                {
-                    kliknutaKarta = temp;
-                    break;
-                }
-            }
+            
+            Karta kliknutaKarta = getKliknutaKarta(sobaIgre , mouseX);
             if (kliknutaKarta == null)
             {
                 return;//karta nije kliknuta ne uciniti nista
@@ -51,60 +52,101 @@ namespace Treseta.Hubs
             //ova dva if bloka spreme bacnje karte povecaju broj bacenih karata i maknu kartu iz liste karata kod igraca
             if (sobaIgre.brojBacenihKarata == 0)
             {
-                baciKartu(sobaIgre , kliknutaKarta);
-                
-            }
-            if (sobaIgre.baceneKarte[0].zvanje == kliknutaKarta.zvanje){
                 baciKartu(sobaIgre, kliknutaKarta);
+
             }
-            else{
-                int brojKarata = sobaIgre.igraci[sobaIgre.igracNaPotezu].mojeKarte.Count(x=> x.zvanje == sobaIgre.baceneKarte[0].zvanje);
-                if (brojKarata > 0)
-                    Clients.Client(id).upozorenje("Moras odgovarati na zvanje");
-                baciKartu(sobaIgre, kliknutaKarta);
+            else
+            {
+                if (sobaIgre.baceneKarte[0].zvanje == kliknutaKarta.zvanje)
+                {
+                    baciKartu(sobaIgre, kliknutaKarta);
+                }
+                else
+                {
+                    int brojKarata = sobaIgre.igraci[sobaIgre.igracNaPotezu].mojeKarte.Count(x => x.zvanje == sobaIgre.baceneKarte[0].zvanje);
+                    if (brojKarata > 0)
+                    {
+                        Clients.Client(id).upozorenje("Moras odgovarati na zvanje");
+                        return;
+                    }
+                    baciKartu(sobaIgre, kliknutaKarta);
+                }
             }
 
+            //saljemo igraci podatke o kliknutoj karti**********************************************************************
             Clients.Client(id).bacenaJe(kliknutaKarta, 0);//iz kliknute kate moze dobiti 
-            //podatke o pozicije karte da zna bacac moze pobrisati a 0 zato jer se ovo salje korisniku koji je bacio kartu
-            //sad saljmo svima ostalima
+                                                          //podatke o pozicije karte da zna bacac moze pobrisati a 0 zato jer se ovo salje korisniku koji je bacio kartu
+                                                          //sad saljmo svima ostalima
             for (int i = 1; i < 4; i++)
             {
                 Clients.Client(sobaIgre.igraci[(sobaIgre.igracNaPotezu + i) % 4].connectioId).bacenaJe(kliknutaKarta, i);
             }
             sobaIgre.igracNaPotezu = (sobaIgre.igracNaPotezu + 1) % 4;
+            //***************************************************************************************************************
+
             //zavrsija je krug igre 
-            if(sobaIgre.brojBacenihKarata == 4)
+            if (sobaIgre.brojBacenihKarata == 4)
             {
-                System.Threading.Thread.Sleep(5000);//pricekaj 5sec da igraci vide tko je sto bacio
+                System.Threading.Thread.Sleep(2000);//pricekaj 2sec da igraci vide tko je sto bacio
                 sobaIgre.brojBacenihKarata = 0;
-                sobaIgre.krugIgre--;
-                for(int i=0; i<4;i++)
-                Clients.Client(sobaIgre.igraci[i].connectioId).noviKrug();
-                Karta pobjednickaKarta = sobaIgre.baceneKarte[0];
-                int pozPobjednickaKarta=0;
-                for (int j=1;j<4;j++)
-                {
-                   Karta tempPobjednickaKarta = pobjednickaKarta.tkoJeJaci(sobaIgre.baceneKarte[j]);
-                    if (pobjednickaKarta.Equals(tempPobjednickaKarta))
-                    {
-                        pobjednickaKarta = tempPobjednickaKarta;
-                        pozPobjednickaKarta = j;
-                    }
-                }
-                sobaIgre.igracNaPotezu = sobaIgre.igracNaPotezu + pozPobjednickaKarta;//sredi dodjelu bodova 
+                for (int i = 0; i < 4; i++)
+                    Clients.Client(sobaIgre.igraci[i].connectioId).noviKrug();
 
-
+                //dodjela bodova ovog kruga i određivane sljedeceg igraca
+                zavrsetakKruga(sobaIgre);
             }
-
+           
         }
 
-        //bacanje karte OEIJFCoiaj
-        private void baciKartu(Room sobaIgre , Karta kliknutaKarta)
+        //određuje koji je sljedeci igrac, dodojeljuje bodov pobjedniku kruga i provjerava dali je igra zavrsila
+        private void zavrsetakKruga(Room sobaIgre)
+        {
+            Karta pobjednickaKarta = sobaIgre.baceneKarte[0];
+            int pozPobjednickaKarta = 0;
+            int bodoviKruga = pobjednickaKarta.bodovi;
+            for (int j = 1; j < 4; j++)
+            {
+                bodoviKruga += sobaIgre.baceneKarte[j].bodovi;
+                Karta tempPobjednickaKarta = pobjednickaKarta.tkoJeJaci(sobaIgre.baceneKarte[j]);
+                if (!pobjednickaKarta.Equals(tempPobjednickaKarta))
+                {
+                    pobjednickaKarta = tempPobjednickaKarta;
+                    pozPobjednickaKarta = j;
+                }
+            }
+            sobaIgre.igracNaPotezu = (sobaIgre.igracNaPotezu + pozPobjednickaKarta) % 4;//igrac koji je bacio najjacu kartu ovaj krug
+            dodjeliBodove(sobaIgre, bodoviKruga);
+            //odredi koji je krug igre
+            sobaIgre.krugIgre--;
+
+            //kraj igre
+            if (sobaIgre.krugIgre == 0)
+            {
+                //davanje bodova za zadnje dizanje
+                dodjeliBodove(sobaIgre, 3);
+
+                for (int i = 0; i < 4; i++)
+                    Clients.Client(sobaIgre.igraci[i].connectioId).krajIgre(sobaIgre.bodoviTimaA / 3, sobaIgre.bodoviTimaB / 3);
+            }
+        }
+        //dodjel bodova
+        private void dodjeliBodove(Room sobaIgre , int brojBodova)
+        {
+            if (sobaIgre.igracNaPotezu == 0 || sobaIgre.igracNaPotezu == 2)
+                sobaIgre.bodoviTimaA += brojBodova;
+            if (sobaIgre.igracNaPotezu == 1 || sobaIgre.igracNaPotezu == 3)
+                sobaIgre.bodoviTimaB += brojBodova;
+        }
+
+        //bacanje karte 
+        private void baciKartu(Room sobaIgre, Karta kliknutaKarta)
         {
             sobaIgre.baceneKarte[sobaIgre.brojBacenihKarata] = kliknutaKarta;
             sobaIgre.brojBacenihKarata++;
             sobaIgre.igraci[sobaIgre.igracNaPotezu].mojeKarte.Remove(kliknutaKarta);
         }
+
+        //poziva se automatski pri ulasku u sobu za igru
         public void joinRoom(string userName, string imeSobe)
         {
             var id = Context.ConnectionId;
@@ -147,7 +189,7 @@ namespace Treseta.Hubs
         }
 
 
-
+        //funkcija za chat
         public void sendMessage(string korisnik, string soba, string poruka)
         {
 
@@ -158,6 +200,7 @@ namespace Treseta.Hubs
 
         }
 
+        //potrebni popravci ???????
         public override System.Threading.Tasks.Task OnDisconnected(bool x)
         {
             var otisao = Context.ConnectionId;

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Treseta.Models
 {
     public enum Zvanje : int { bastoni = 1, spade = 2, kupe = 3, dinari = 4 }
+
     public class Karta : IComparable
     {
         public string ime { get; set; }
@@ -26,6 +27,23 @@ namespace Treseta.Models
             this.pathSlike = pathSlike;
             sirina = 80;
             visina = 100;
+        }
+
+
+        public override bool Equals(object obj)
+        {
+
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            return ((Karta) obj).ime.Equals(this.ime);
+        }
+
+        // override object.GetHashCode
+        public override int GetHashCode()
+        {
+            return this.ime.GetHashCode();
         }
 
         public int CompareTo(object obj)

@@ -1,0 +1,23 @@
+﻿h1 {
+    color: #742ECC;
+    text-align: center;
+}
+
+label[id=igrac1]{
+    color: red; 
+    transform: rotate(-90deg);
+    transform-origin : left;
+    vertical-align : middle;
+}
+
+ label[id=igrac3]{
+    color: red; 
+    transform: rotate(90deg);
+    transform-origin : right;
+    vertical-align:middle;
+}
+
+h3{
+    color: blue;
+    text-align : center;      
+}

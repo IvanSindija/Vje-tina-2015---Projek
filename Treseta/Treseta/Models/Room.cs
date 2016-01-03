@@ -20,7 +20,7 @@ namespace Treseta.Models
         public int bodoviTimaB { get; set; }//1,3
         public int igracNaPotezu { get; set; }//od 0 do 3
         public Karta[] baceneKarte = new Karta[4];//karte koje su bacene na stol
-        public int brojBacenihKarata { get; set;}
+        public int brojBacenihKarata { get; set;}//0 do 3
         public int krugIgre { get; set; }//krug igre od 0 do 10
 
 
@@ -30,7 +30,7 @@ namespace Treseta.Models
             bodoviTimaB = 0;
             igracNaPotezu = 0;
             brojBacenihKarata = 0;
-            krugIgre = 0;
+            krugIgre = 10;
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿<h1>@ViewData["imeSobe"]</h1>
 <div>
     <h3 id="igrac2">igrac3 </h3>
-    <label id="igrac1">igrac2</label>
-    <canvas id="myCanvas" width="1000" height="700" style="border:1px solid #000000;"></canvas>
-    <label id="igrac3">igrac4</label>
+    <div>
+        <label id="igrac1">igrac2</label>
+        <canvas id="myCanvas" width="1000" height="700" style="border:1px solid #000000;"></canvas>
+        <label id="igrac3">igrac4</label>
+    </div>
     <h3 id="igrac0">@ViewData["korisnickoIme"]</h3>
 </div>
 <div class="container">
@@ -14,6 +16,8 @@
 <div id="chatBox" style="overflow-y: scroll; height:150px; border:1px solid #000000;">
     <ul id="discussion"></ul>
 </div>
+
+<link href="~/Content/Partija.css" rel="stylesheet" />
 @section scripts {
     <!--Script references. -->
     <!--The jQuery library is required and is referenced by default in _Layout.cshtml. -->
@@ -31,6 +35,17 @@
             var c=document.getElementById("myCanvas");
             var ctx=c.getContext("2d");
 
+            //zavrsetak partije
+            chat.client.krajIgre = function(timAbodovi , timBbodovi){
+                alert("timA = "+timAbodovi + ",timB = "+timBbodovi);
+                returnToGlavniIzbornik(name);
+            }
+
+            //poziva se u novom krugu igre
+            chat.client.noviKrug = function(){
+                ctx.clearRect(360,190,300,320);
+            }
+
             //dobiveni podatci o drubim igracima
             chat.client.podatciOIgracima = function(name1 , poz1, name2, poz2, name3, poz3){
                 if(name1 != null)
@@ -42,9 +57,9 @@
             }
 
             //korisnik napustio usrid partije
-            chat.client.pizda = function (name) {
-                alert(name+"je napustio partiju");
-                //vrati ih u glavni izborink!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            chat.client.pizda = function (nameL) {
+                alert(nameL+"je napustio partiju");
+                returnToGlavniIzbornik(name);
             };
 
             //servaer javlja da je korisnik napustio sobu
@@ -75,9 +90,9 @@
             };
 
             //upozorenja da nisam na potezu
-            chat.client.upzorenje = function (msg){
+            chat.client.upozorenje = function (msg){
                 alert(msg);
-            }
+            };
 
             //iscrtavanje bacene karte i broj igraca koji baca
             chat.client.bacenaJe = function ( karta , intBacac){
@@ -143,6 +158,16 @@
             });
         });
 
+
+        function returnToGlavniIzbornik(name){
+            $.ajax({
+                url: "Home/GlavniIzbornik",
+                type: "GET",
+                data: { korisnik: name },
+            }).done(function(data) {
+                alert("nesto se desilo");
+            });
+        }
         // This optional function html-encodes messages for display in the page.
         function htmlEncode(value) {
             var encodedValue = $('<div />').text(value).html();
