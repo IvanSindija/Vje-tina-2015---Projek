@@ -16,6 +16,7 @@
 <div id="chatBox" style="overflow-y: scroll; height:150px; border:1px solid #000000;">
     <ul id="discussion"></ul>
 </div>
+<button id ="gi" hidden onclick="location.href='@Url.Action("GlavniIzbornik", "Home", new { korisnik = @ViewData["korisnickoIme"] })'"></button>
 
 <link href="~/Content/Partija.css" rel="stylesheet" />
 @section scripts {
@@ -39,12 +40,12 @@
             chat.client.krajIgre = function(timAbodovi , timBbodovi){
                 alert("timA = "+timAbodovi + ",timB = "+timBbodovi);
                 returnToGlavniIzbornik(name);
-            }
+            };
 
             //poziva se u novom krugu igre
             chat.client.noviKrug = function(){
                 ctx.clearRect(360,190,300,320);
-            }
+            };
 
             //dobiveni podatci o drubim igracima
             chat.client.podatciOIgracima = function(name1 , poz1, name2, poz2, name3, poz3){
@@ -54,7 +55,7 @@
                     $('#igrac'+poz2).text(name2.imeKorisnika);
                 if(name3 != null)
                     $('#igrac'+poz3).text(name3.imeKorisnika);
-            }
+            };
 
             //korisnik napustio usrid partije
             chat.client.pizda = function (nameL) {
@@ -111,7 +112,7 @@
                     }
                     if(intBacac==1){
                         ctx.drawImage(img,560,300,parseInt(karta.sirina),parseInt(karta.visina));
-                    }   
+                    }
                 }
             }
 
@@ -125,11 +126,11 @@
                     imgs.push(img);
                     img.src = karta.pathSlike;
                     img.onload = function(){
-                        imagesOK++; 
+                        imagesOK++;
                         if (imagesOK>= 10  ){
                             for(j=0;j<10;j++)
                                 ctx.drawImage(imgs[j],parseInt(ruka[j].xPoz),590,parseInt(ruka[j].sirina),parseInt(ruka[j].visina));
-                        };  
+                        };
                     };
                 };
             };
@@ -160,14 +161,9 @@
 
 
         function returnToGlavniIzbornik(name){
-            $.ajax({
-                url: "Home/GlavniIzbornik",
-                type: "GET",
-                data: { korisnik: name },
-            }).done(function(data) {
-                alert("nesto se desilo");
-            });
-        }
+            document.getElementById("gi").click();
+            
+        };
         // This optional function html-encodes messages for display in the page.
         function htmlEncode(value) {
             var encodedValue = $('<div />').text(value).html();

@@ -146,7 +146,11 @@ namespace Treseta.Hubs
             sobaIgre.igraci[sobaIgre.igracNaPotezu].mojeKarte.Remove(kliknutaKarta);
         }
 
-        //poziva se automatski pri ulasku u sobu za igru
+        /// <summary>
+        /// poziva se automatski pri ulasku u sobu za igru
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="imeSobe"></param>
         public void joinRoom(string userName, string imeSobe)
         {
             var id = Context.ConnectionId;
@@ -215,6 +219,7 @@ namespace Treseta.Hubs
                     {
                         sobaOdlaska = soba;//dohvatim sobu iz koje odlazi
                         userName = sobaOdlaska.igraci[i].imeKorisnika;
+                        //ako je soba bila puna sve ih izbaci i prekini igru
                         if (sobaOdlaska.brojIgraca == 4)
                         {
                             for (int e = 0; e < 4; e++)
@@ -235,9 +240,13 @@ namespace Treseta.Hubs
                 }
             }
 
+
             // send to all except caller client
-            for (int i = 0; i < sobaOdlaska.brojIgraca; i++)
-                Clients.Client(sobaOdlaska.igraci[i].connectioId).onUserDisconnected(userName);
+            if (sobaOdlaska != null)
+                for (int i = 0; i < sobaOdlaska.brojIgraca; i++)
+                {
+                    Clients.Client(sobaOdlaska.igraci[i].connectioId).onUserDisconnected(userName);
+                }
 
 
             return base.OnDisconnected(x);
