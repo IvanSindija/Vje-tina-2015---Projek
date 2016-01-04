@@ -5,14 +5,14 @@
 
 label[id=igrac1]{
     color: red; 
-    transform: rotate(-90deg);
+    transform: translateY(-350px) rotate(-90deg);
     transform-origin : left;
     vertical-align : middle;
 }
 
  label[id=igrac3]{
     color: red; 
-    transform: rotate(90deg);
+    transform:translateY(-350px) rotate(90deg);
     transform-origin : right;
     vertical-align:middle;
 }

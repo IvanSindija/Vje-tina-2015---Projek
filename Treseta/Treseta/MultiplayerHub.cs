@@ -33,6 +33,13 @@ namespace Treseta.Hubs
             return null;
         }
 
+
+        /// <summary>
+        /// kad se klikne na platno u igri pozove se ova funkcija
+        /// </summary>
+        /// <param name="mouseX"></param>
+        /// <param name="mouseY"></param>
+        /// <param name="imeSobe"></param>
         public void cardClick(int mouseX, int mouseY, string imeSobe)
         {
             Room sobaIgre = sobe.Find(x => x.imeSobe.Equals(imeSobe));
@@ -204,52 +211,87 @@ namespace Treseta.Hubs
 
         }
 
-        //potrebni popravci ???????
+        /// <summary>
+        /// pri odlasku iz sobe se pozove
+        /// </summary>
+        /// <param name="x"> ignoriram </param>
+        /// <returns></returns>
         public override System.Threading.Tasks.Task OnDisconnected(bool x)
         {
             var otisao = Context.ConnectionId;
-            Room sobaOdlaska = null;
-            string userName = null;
-            foreach (Room soba in sobe)
+            string userOtisao = null;
+            Room sobaOdlaska = getSobaOdlaska(otisao, ref userOtisao);
+            //osigurnje i ovaj slucaj se desi kad je igrac otiso tjekom partije i OnDisconnected se pozove od strane igraca koji su ibaceni iz sobe 
+            if (sobaOdlaska == null)
+                return base.OnDisconnected(x);
+            //soba je puna i moramo prekinuti partiju koja je u tjeku i to dojaviti svima osim korisniku koji odlazi
+            if (sobaOdlaska.brojIgraca == 4)
             {
-                int j = 0;
-                for (int i = 0; i < soba.brojIgraca; i++)
+                sobaOdlaska.brojIgraca = 0;
+                for (int i=0;i<4;i++)
                 {
-                    if (soba.igraci[i].connectioId.Equals(otisao))
+                    if (!sobaOdlaska.igraci[i].connectioId.Equals(otisao))
                     {
-                        sobaOdlaska = soba;//dohvatim sobu iz koje odlazi
-                        userName = sobaOdlaska.igraci[i].imeKorisnika;
-                        //ako je soba bila puna sve ih izbaci i prekini igru
-                        if (sobaOdlaska.brojIgraca == 4)
+                        if (i == 0 || i == 2)
                         {
-                            for (int e = 0; e < 4; e++)
-                            {
-                                Clients.Client(sobaOdlaska.igraci[e].connectioId).pizda(userName);
-                                sobaOdlaska.igraci[e] = null;
-                                sobaOdlaska.brojIgraca = 0;
-                                j = 1;
-                            }
-                            break;
+                            Clients.Client(sobaOdlaska.igraci[i].connectioId).pizda("Tim B pobjeđuje jer je " +userOtisao);
                         }
-                        soba.brojIgraca--;
-                        j = 1;
-                        soba.igraci[i] = null;
+                        else
+                        {
+                            Clients.Client(sobaOdlaska.igraci[i].connectioId).pizda("Tim A pobjeđuje jer je "+userOtisao);
+                        }
                     }
-                    if (j == 1) break;
-
+                    sobaOdlaska.igraci[i] = null;
                 }
+                return base.OnDisconnected(x);
             }
 
+            //ako soba nije puna onda moram prepraviti pozicije igraca i nove pozicije za stolom javiti igracia**********************
 
-            // send to all except caller client
-            if (sobaOdlaska != null)
-                for (int i = 0; i < sobaOdlaska.brojIgraca; i++)
+            //micem korisnika iz sobe i javljam im koji je korisnik otisao
+            int j = 0; //koristim za pomicanje krisnika na i-j poziciju kad izbacim korisnika iz polja
+            for(int i=0; i<sobaOdlaska.brojIgraca-j; i++)
+            {
+                if (sobaOdlaska.igraci[i].connectioId.Equals(otisao))
                 {
-                    Clients.Client(sobaOdlaska.igraci[i].connectioId).onUserDisconnected(userName);
+                    j = 1;
                 }
+                sobaOdlaska.igraci[i] = sobaOdlaska.igraci[i+j];
+                if(sobaOdlaska.igraci[i] != null)
+                     Clients.Client(sobaOdlaska.igraci[i].connectioId).onUserDisconnected(userOtisao);
+            }
+            sobaOdlaska.brojIgraca--;
+            sobaOdlaska.igraci[sobaOdlaska.brojIgraca]=null;
 
-
+       
+            //svima javljmo koje su pozicije oko stola
+            for (int i = 0; i < sobaOdlaska.brojIgraca; i++)
+            {
+                Clients.Client(sobaOdlaska.igraci[i].connectioId).podatciOIgracima(sobaOdlaska.igraci[(i + 1) % 4], 1, sobaOdlaska.igraci[(i + 2) % 4], 2, sobaOdlaska.igraci[(i + 3) % 4], 3);
+            }
             return base.OnDisconnected(x);
+        }
+
+        //dohvaca sobu u kojoj je korisnik koji odlazi i postavi korisnicko ime onog sto odlazi
+        private Room getSobaOdlaska(string connectionId , ref string userOtisao)
+        {
+            Room sobaOdlaska = null;
+            bool nadenaSoba = false;
+            foreach(Room soba in sobe)
+            {
+                for(int i=0; i<soba.brojIgraca; i++)
+                {
+                    if (connectionId.Equals(soba.igraci[i].connectioId))
+                    {
+                        userOtisao = soba.igraci[i].imeKorisnika;
+                        sobaOdlaska = soba;
+                        nadenaSoba = true;
+                        break;
+                    }
+                }
+                if (nadenaSoba) break;
+            }
+            return sobaOdlaska;
         }
     }
 }
