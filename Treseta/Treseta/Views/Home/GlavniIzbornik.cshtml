@@ -5,7 +5,7 @@
     <button onclick="location.href='@Url.Action("Pravila", "Home", "")'">pravila</button>
 </div>
 <div>
-    <button onclick="location.href='@Url.Action("singlePlayer", "Home", "")'">Single Player</button>
+    <button onclick="location.href='@Url.Action("SinglePlayer", "Home", new { korisnickoIme = @ViewData["korisnik"] })'">Single Player</button>
 
 </div>
 <div>
@@ -18,8 +18,5 @@
             }
         </div>
     }
-</div>
-<div>
-    <button onclick="location.href='@Url.Action("StvoriSobu", "Home", "")'">Stvori sobu</button>
 </div>
 

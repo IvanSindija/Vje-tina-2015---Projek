@@ -11,6 +11,5 @@ namespace Treseta.Models
     public class KorisnikModel
     {
         public string userName { get; set; }
-        public string password { get; set; }
     }
 }

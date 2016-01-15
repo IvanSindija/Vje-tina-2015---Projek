@@ -10,6 +10,13 @@ namespace Treseta.Controllers
     public class HomeController : Controller
     {
 
+        public ActionResult SinglePlayer(string korisnik)
+        {
+            //ovo ti pozove view SinglelPlayer koji se nalazi u Views/Home/SinglelPlayer
+            //
+            return View();
+        }
+
         public ActionResult Index()
         {
             KorisnikModel korisnk = new KorisnikModel();
@@ -35,32 +42,16 @@ namespace Treseta.Controllers
             //provjeri dali postoji u bazi korisnik
             if (korisnik.userName == null || korisnik.userName == String.Empty)//pazi za null vrjednosti sjeba ce te
                 return View("~/Views/Home/Index.cshtml");
-            if (true)//izvede se ako postoji korisnik
-            {
-                List<Room> sobe = SingletonListaSoba.dohvatiListuSoba();
-                ViewData["korisnik"] = korisnik.userName;// nemoj ovo prominiti
-                return View(sobe); //omogucava prikaz liste soba u vievu izbornika
-            }
-            else
-            {
-                ViewBag.Massege = 1;//ovaj red bi ko mora biti za pokreniti skriput za upozorito o neuspjelom loginu
-                return View("~/Views/Home/Index.cshtml");
-            }
+            List<Room> sobe = SingletonListaSoba.dohvatiListuSoba();
+            ViewData["korisnik"] = korisnik.userName;// nemoj ovo prominiti
+            return View(sobe); //omogucava prikaz liste soba u vievu izbornika
         }
-        /// <summary>
-        /// aktivira se pritiskom na signup u pocetnom zaslonu
-        /// </summary>
-        /// <returns>vraca view na registraciski obrazac</returns>
-        public ActionResult Register()
-        {
 
-            return View();
-        }
 
         public ActionResult Partija(string imeSobe, string korisnickoIme)
         {
             ViewData["imeSobe"] = imeSobe;
-            ViewData["korisnickoIme"] = korisnickoIme;     
+            ViewData["korisnickoIme"] = korisnickoIme;
             return View();
         }
 
