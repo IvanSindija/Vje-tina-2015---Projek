@@ -69,6 +69,7 @@
             //korisnik napustio usrid partije
             chat.client.pizda = function (nameL) {
                 alert(nameL+"je napustio partiju");
+                $('#gi').click();
             };
 
             //servaer javlja da je korisnik napustio sobu
@@ -141,6 +142,7 @@
                     };
                 };
             };
+            //---------------------------------------------------------------------------------------------------------------
             // Start the connection.
             $.connection.hub.start().done(function () {
 

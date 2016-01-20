@@ -12,8 +12,7 @@ namespace Treseta.Controllers
 
         public ActionResult SinglePlayer(string korisnik)
         {
-            //ovo ti pozove view SinglelPlayer koji se nalazi u Views/Home/SinglelPlayer
-            //
+            ViewData["korisnik"] = korisnik;
             return View();
         }
 
