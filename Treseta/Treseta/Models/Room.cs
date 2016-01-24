@@ -21,7 +21,7 @@ namespace Treseta.Models
         public int igracNaPotezu { get; set; }//od 0 do 3
         public Karta[] baceneKarte = new Karta[4];//karte koje su bacene na stol
         public int brojBacenihKarata { get; set;}//0 do 3
-        public int krugIgre { get; set; }//krug igre od 0 do 10
+        public int krugIgre { get; set; }//krug igre od 10 do 0
 
 
         public Room()

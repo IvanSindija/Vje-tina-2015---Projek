@@ -20,12 +20,12 @@ namespace Treseta.Hubs
                 sobe = SingletonListaSoba.dohvatiListuSoba();
         }
         //odredi koja je bacena karta iz kordinate klika
-        private Karta getKliknutaKarta(Room sobaIgre ,int mouseX)
+        private Karta getKliknutaKarta(Room sobaIgre ,int mouseX , int mouseY)
         {
-            for (int i = 0; i < sobaIgre.krugIgre; i++)
+            for (int i = sobaIgre.krugIgre-1; i >=0; i--)
             {
-                Karta temp = sobaIgre.igraci[sobaIgre.igracNaPotezu].mojeKarte.ElementAt(i);//karta za provjeru
-                if (temp.xPoz < mouseX && (temp.xPoz + temp.sirina) > mouseX)//kliknuta je ova karta
+                Karta temp = sobaIgre.igraci[sobaIgre.igracNaPotezu].mojeKarte.ElementAt(i);//karta za provjeru ide od najvise prema najnizoj
+                if (temp.xPoz < mouseX && (temp.xPoz + temp.sirina) > mouseX && temp.yPoz <mouseY && temp.yPoz +temp.visina > mouseY)//kliknuta je ova karta
                 {
                     return temp;
                 }
@@ -50,7 +50,7 @@ namespace Treseta.Hubs
                 return;
             }
             
-            Karta kliknutaKarta = getKliknutaKarta(sobaIgre , mouseX);
+            Karta kliknutaKarta = getKliknutaKarta(sobaIgre , mouseX , mouseY);
             if (kliknutaKarta == null)
             {
                 return;//karta nije kliknuta ne uciniti nista
@@ -81,12 +81,12 @@ namespace Treseta.Hubs
             }
 
             //saljemo igraci podatke o kliknutoj karti**********************************************************************
-            Clients.Client(id).bacenaJe(kliknutaKarta, 0);//iz kliknute kate moze dobiti 
+            Clients.Client(id).bacenaJe(kliknutaKarta, 0 , sobaIgre.igraci[sobaIgre.igracNaPotezu].mojeKarte);//iz kliknute kate moze dobiti 
                                                           //podatke o pozicije karte da zna bacac moze pobrisati a 0 zato jer se ovo salje korisniku koji je bacio kartu
                                                           //sad saljmo svima ostalima
             for (int i = 1; i < 4; i++)
             {
-                Clients.Client(sobaIgre.igraci[(sobaIgre.igracNaPotezu + i) % 4].connectioId).bacenaJe(kliknutaKarta, i);
+                Clients.Client(sobaIgre.igraci[(sobaIgre.igracNaPotezu + i) % 4].connectioId).bacenaJe(kliknutaKarta, i , null);//ovima nemoram slati njihovu ruku zato null
             }
             sobaIgre.igracNaPotezu = (sobaIgre.igracNaPotezu + 1) % 4;
             //***************************************************************************************************************
@@ -166,8 +166,14 @@ namespace Treseta.Hubs
                                                                       // int a = 0;
                                                                       //if (sobaJoin.brojIgraca == 3)
                                                                       //  a++;
+            if(sobaJoin==null || userName == null)
+            {
+                Clients.Client(id).izbaci();
+                return;
 
-            sobaJoin.igraci[sobaJoin.brojIgraca] = new Igrac() { imeKorisnika = userName, connectioId = id };
+            }
+                sobaJoin.igraci[sobaJoin.brojIgraca] = new Igrac() { imeKorisnika = userName, connectioId = id };
+
             int pozicija = sobaJoin.brojIgraca;//mjesto u koje ubacujem
             //slanje podataka o ostalim korisnicima trenutnom igracu ime , pozicija u sobi
             Clients.Client(id).podatciOIgracima(sobaJoin.igraci[(pozicija + 1) % 4], 1, sobaJoin.igraci[(pozicija + 2) % 4], 2, sobaJoin.igraci[(pozicija + 3) % 4], 3);
@@ -190,7 +196,8 @@ namespace Treseta.Hubs
                     ruka.Sort();
                     for (int j = 0; j < 10; j++)
                     {
-                        ruka.ElementAt(j).xPoz = 80 + j * 90;
+                        ruka.ElementAt(j).xPoz = 50 + j * 140/2;//karte ce se polovicno preklapati
+                        ruka.ElementAt(j).yPoz = 500;
                     }
                     sobaJoin.igraci[i].mojeKarte = ruka;
                     Clients.Client(sobaJoin.igraci[i].connectioId).zapocniIgru(ruka);

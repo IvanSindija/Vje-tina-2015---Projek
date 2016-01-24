@@ -1,14 +1,11 @@
 ﻿@model List<Treseta.Models.Room>
-<h2>GlavniIzbornik</h2>
-@ViewData["korisnik"]
-<div>
+<h2>Glavni Izbornik</h2>
+<div id="tipkice">
     <button onclick="location.href='@Url.Action("Pravila", "Home", "")'">pravila</button>
-</div>
-<div>
     <button onclick="location.href='@Url.Action("SinglePlayer", "Home", new { korisnik = @ViewData["korisnik"] })'">Single Player</button>
 
 </div>
-<div>
+<div id="sobe">
     @foreach (var item in Model)
     {
         <div>
@@ -19,4 +16,4 @@
         </div>
     }
 </div>
-
+<link href="~/Content/GlavniIzbornik.css" rel="stylesheet" />

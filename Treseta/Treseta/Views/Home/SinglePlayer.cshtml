@@ -3,6 +3,7 @@
 </div>
 <h2 position = "center">@ViewData["korisnik"]</h2>
 
+<link href="~/Content/Partija.css" rel="stylesheet" />
 @section scripts{
     <!--Script references. -->
     <!--The jQuery library is required and is referenced by default in _Layout.cshtml. -->
@@ -27,6 +28,7 @@
             hub.client.upozorenje = function(poruka){
                 alert(poruka);
             }
+
             //********************************KRESI ZA IMPLEMENTIRANJE**************************************************************
             hub.client.odgovor = function(rukuIgraca, kartuBacenuOdIgraca,kartuIzvucenuAI, kataIzvucenaIgrac){
 
