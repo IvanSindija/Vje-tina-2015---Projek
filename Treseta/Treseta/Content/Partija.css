@@ -25,12 +25,7 @@ label[id=igrac1]{
     transform-origin : right;
     vertical-align:middle;
 }
- div[id=game]{
-     float:left;
- }
- div[id=chat]{
-     float:right;
- }
+
 h3{
     color: blue;
     position:absolute;

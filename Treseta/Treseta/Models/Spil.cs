@@ -81,6 +81,8 @@ namespace Treseta.Models
         {
             Random rnd = new Random();
             int indexKarte = rnd.Next(spil.Count);
+            if (spil.Count == 0)
+                return null;
             Karta karta = spil[indexKarte];
             spil.RemoveAt(indexKarte);
             return karta;
