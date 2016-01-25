@@ -14,20 +14,17 @@ h3{
 }
 button{
     font-size:xx-large;
+    font-family:'Comic Sans MS';
+    width:500px;
 }
 div[id=tipkice]{
     position:absolute;
-    left:38%;
+    left:42%;
     top :20%;
 }
 div[id=sobe]{
     position:absolute;
-    left:35%;
+    left:37%;
     top:30%;
     font-size :xx-large;
-}
-label{
-    font-size:xx-large;
-    font-family:'Comic Sans MS';
-    color: black;
 }

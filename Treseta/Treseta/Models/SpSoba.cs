@@ -36,11 +36,12 @@ namespace Treseta.Models
             int i = rnd.Next()%karteU_RuciAI.Count;
             return karteU_RuciAI.ElementAt(i);
         }
+
         public Karta aiVracaKartu(Karta bacenaIgrac)
         {
             Karta odgovor;
             Random rnd = new Random();
-            List<Karta> mogucnostiZaPovratak = karteU_RuciAI.FindAll(x => x.zvanje == bacenaIgrac.zvanje);
+            List<Karta> mogucnostiZaPovratak = karteU_RuciAI.FindAll(x => x.zvanje.Equals(bacenaIgrac.zvanje));
             if (mogucnostiZaPovratak.Count == 0)
             {
                 int i = rnd.Next() % karteU_RuciAI.Count;
@@ -49,7 +50,7 @@ namespace Treseta.Models
             else
             {
                 int i = rnd.Next() % mogucnostiZaPovratak.Count;
-                odgovor = karteU_RuciAI.ElementAt(i);
+                odgovor = mogucnostiZaPovratak.ElementAt(i);
             }
 
             return odgovor;

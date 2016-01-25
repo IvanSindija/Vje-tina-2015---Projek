@@ -172,6 +172,11 @@ namespace Treseta.Hubs
                 return;
 
             }
+            if (sobaJoin.brojIgraca == 4)
+            {
+                Clients.Client(id).izbaci();
+                return;
+            }
                 sobaJoin.igraci[sobaJoin.brojIgraca] = new Igrac() { imeKorisnika = userName, connectioId = id };
 
             int pozicija = sobaJoin.brojIgraca;//mjesto u koje ubacujem

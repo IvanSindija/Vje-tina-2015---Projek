@@ -46,5 +46,5 @@ D:\a3godina\C#projekt\Treseta\Treseta\bin\System.Web.WebPages.Deployment.xml
 D:\a3godina\C#projekt\Treseta\Treseta\bin\System.Web.WebPages.Razor.xml
 D:\a3godina\C#projekt\Treseta\Treseta\bin\Antlr3.Runtime.pdb
 D:\a3godina\C#projekt\Treseta\Treseta\bin\Newtonsoft.Json.xml
-D:\a3godina\C#projekt\Treseta\Treseta\obj\Debug\Treseta.dll
-D:\a3godina\C#projekt\Treseta\Treseta\obj\Debug\Treseta.pdb
+D:\a3godina\C#projekt\Treseta\Treseta\obj\Release\Treseta.dll
+D:\a3godina\C#projekt\Treseta\Treseta\obj\Release\Treseta.pdb

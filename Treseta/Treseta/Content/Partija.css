@@ -10,6 +10,8 @@ body{
 
 canvas{
     background-image: url(http://i.stack.imgur.com/jGlzr.png);
+    position:absolute;
+    left:35%;
 }
 
 label[id=igrac1]{
@@ -28,6 +30,5 @@ label[id=igrac1]{
 
 h3{
     color: blue;
-    position:absolute;
-    left : 45%;      
+    text-align: center;     
 }
