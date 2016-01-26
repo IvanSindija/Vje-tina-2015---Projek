@@ -1,5 +1,4 @@
-﻿<h1>@ViewData["imeSobe"]</h1>
-<h3 id="igrac2">igrac3 </h3>
+﻿<h3 id="igrac2">igrac3 </h3>
 
 <div>
     <label id="igrac1">igrac2</label>
@@ -14,7 +13,7 @@
     <input type="button" id="sendmessage" value="Send" />
 </div>
 
-<div id="chatBox" style="overflow-y: scroll; height:150px; border:1px solid #000000; background-color:white;">
+<div id="chatBox" style="overflow-y: scroll; height:700px; width:250px; border:1px solid #000000; background-color:white;">
     <ul id="discussion"></ul>
 </div>
 <button id="gi" hidden onclick="location.href='@Url.Action("GlavniIzbornik", "Home", new { korisnik = @ViewData["korisnickoIme"] })'"></button>

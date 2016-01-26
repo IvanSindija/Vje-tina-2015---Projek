@@ -49,6 +49,8 @@ namespace Treseta.Hubs
                 Clients.Client(id).upozorenje("Nisi na potezu");
                 return;
             }
+            if (sobaIgre.brojIgraca < 4)
+                return;
             
             Karta kliknutaKarta = getKliknutaKarta(sobaIgre , mouseX , mouseY);
             if (kliknutaKarta == null)

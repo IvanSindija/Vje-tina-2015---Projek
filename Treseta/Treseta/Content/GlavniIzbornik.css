@@ -15,16 +15,15 @@ h3{
 button{
     font-size:xx-large;
     font-family:'Comic Sans MS';
-    width:500px;
+    width:600px;
 }
 div[id=tipkice]{
     position:absolute;
-    left:42%;
+    left:30%;
     top :20%;
 }
 div[id=sobe]{
     position:absolute;
-    left:37%;
+    left:30%;
     top:30%;
-    font-size :xx-large;
 }

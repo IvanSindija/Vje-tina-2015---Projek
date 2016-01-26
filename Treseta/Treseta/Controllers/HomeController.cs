@@ -37,10 +37,12 @@ namespace Treseta.Controllers
         [HttpPost]
         public ActionResult GlavniIzbornik(KorisnikModel korisnik)
         {
-            //povezi se s bazom
-            //provjeri dali postoji u bazi korisnik
             if (korisnik.userName == null || korisnik.userName == String.Empty)//pazi za null vrjednosti sjeba ce te
                 return View("~/Views/Home/Index.cshtml");
+            if (!korisnik.userName.All(char.IsLetterOrDigit))
+            {
+                return View("~/Views/Home/Index.cshtml");
+            }
             List<Room> sobe = SingletonListaSoba.dohvatiListuSoba();
             ViewData["korisnik"] = korisnik.userName;// nemoj ovo prominiti
             return View(sobe); //omogucava prikaz liste soba u vievu izbornika

@@ -27,6 +27,7 @@ namespace Treseta.Models
         public Room()
         {
             bodoviTimaA = 0;
+            brojIgraca = 0;
             bodoviTimaB = 0;
             igracNaPotezu = 0;
             brojBacenihKarata = 0;

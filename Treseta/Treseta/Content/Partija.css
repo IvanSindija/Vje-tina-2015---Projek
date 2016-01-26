@@ -11,24 +11,37 @@ body{
 canvas{
     background-image: url(http://i.stack.imgur.com/jGlzr.png);
     position:absolute;
-    left:35%;
+    top:5%;
+    left:33%;
 }
 
 label[id=igrac1]{
     color: red; 
+    font-size:large;
     transform: translateY(-350px) rotate(-90deg);
-    transform-origin : left;
-    vertical-align : middle;
+    position:absolute;
+    left:30%;
+    top:89%;
 }
 
  label[id=igrac3]{
     color: red; 
+    font-size:large;
     transform:translateY(-350px) rotate(90deg);
-    transform-origin : right;
-    vertical-align:middle;
-}
+    position:absolute;
+    left :87%;
+    top:90%;
+    }
 
-h3{
+h3[id=igrac2]{
     color: blue;
-    text-align: center;     
+    position:absolute;
+    left:55%;
+    top:-1%;  
+}
+h3[id=igrac0]{
+    color:blue;
+    position:absolute;
+    left:55%;
+    top:93%;
 }

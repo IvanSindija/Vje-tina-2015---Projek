@@ -1,9 +1,7 @@
 ﻿@model List<Treseta.Models.Room>
 <h2>Glavni Izbornik</h2>
 <div id="tipkice">
-  <!--  <button onclick="location.href='@Url.Action("Pravila", "Home", "")'">pravila</button>-->
     <button onclick="location.href='@Url.Action("SinglePlayer", "Home", new { korisnik = @ViewData["korisnik"] })'">Single Player</button>
-
 </div>
 <div id="sobe">
     @foreach (var item in Model)

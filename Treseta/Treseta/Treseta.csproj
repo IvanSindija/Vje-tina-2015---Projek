@@ -167,6 +167,7 @@
     <Content Include="Content\GlavniIzbornik.css" />
     <Content Include="Content\LoginStyle.css" />
     <Content Include="Content\Partija.css" />
+    <Content Include="Content\spsoba.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
