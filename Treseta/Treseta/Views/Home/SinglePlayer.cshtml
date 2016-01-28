@@ -1,7 +1,8 @@
 ﻿<div>
-    <canvas id="myCanvas" width="1000" height="700" style="border:1px solid #000000;"></canvas>
+    <canvas id="myCanvas" width="850" height="700" style="border:1px solid #000000;"></canvas>
 </div>
-<h2 position = "center">@ViewData["korisnik"]</h2>
+<h3 position = "center" >@ViewData["korisnik"]</h3>
+<button id="gi" hidden onclick="location.href='@Url.Action("GlavniIzbornik", "Home", new { korisnik = @ViewData["korisnik"] })'"></button>
 
 <link href="~/Content/Partija.css" rel="stylesheet" />
 @section scripts{
@@ -22,7 +23,7 @@
             var ctx=c.getContext("2d");
 
             hub.client.pocetakIgre = function(ruka){
-                nacrtajKarte(ruka , 10 , ctx);//prvih 10 karata sto smo dobili iscrtavamo na platno
+                iscrtajRuku(ruka , ctx);//prvih 10 karata sto smo dobili iscrtavamo na platno
             };
 
             hub.client.upozorenje = function(poruka){
@@ -30,15 +31,44 @@
             }
 
             //********************************KRESI ZA IMPLEMENTIRANJE**************************************************************
-            hub.client.odgovor = function(rukuIgraca, kartuBacenuOdIgraca,kartuIzvucenuAI, kataIzvucenaIgrac){
+            hub.client.novaRuka = function(novaRuka){
+                ctx.clearRect(0,0,850,700);//brisem sve za svaki slucaj
+                iscrtajRuku(novaRuka,ctx);
+            }
+            hub.client.odgovor = function(rukuIgraca, kartuBacenuOdIgraca,kartuIzvucenuAI, kartaIzvucenaIgrac){
+                ctx.clearRect(0,500,850,200);
+                iscrtajRuku(rukuIgraca,ctx);//ruka bez bacene karte
+                iscrtajKartu(kartuBacenuOdIgraca , ctx , 300 ,260);//karta bacena od igraca
+                setTimeout(function(){//ovo zaustavi izvodjene na 2 sec da igrac moze viditi sto je baio
+                    ctx.clearRect(300,60,140,400);//ocistom bacene karte
+                    iscrtajKartu(kartuIzvucenuAI,ctx,500,60);
+                    iscrtajKartu(kartaIzvucenaIgrac,ctx,500,260);
+                }, 3000); 
 
             }
 
             hub.client.aiIgra = function(karta){
-
+                ctx.clearRect(300,60,140,400);
+                iscrtajKartu(karta,ctx,300,60);                
             }
 
-            hub.client.noviKrug = function(rukuIgraca, kartuBacenuOdIgraca, kartuBacenuOdAI, kartuIzvucenuAI, kataIzvucenaIgrac) {
+            hub.client.krajIgre = function(rez){
+                alert(rez);
+                document.getElementById("gi").click();
+            }
+
+            hub.client.noviKrug = function(rukuIgraca, kartuBacenuOdIgraca, kartuBacenuOdAI, kartuIzvucenuAI, kartaIzvucenaIgrac) {
+                ctx.clearRect(0,0,850,700);
+                iscrtajRuku(rukuIgraca,ctx);//ruka bez bacene karte
+                iscrtajKartu(kartuBacenuOdIgraca , ctx , 300 ,260);//karta bacena od igraca
+                setTimeout(function(){
+                    iscrtajKartu(kartuBacenuOdAI , ctx , 300 , 60);
+                },3000);
+                setTimeout(function(){//ovo zaustavi izvodjene na 2 sec da igrac moze viditi sto je baio
+                    ctx.clearRect(300,60,140,400);//ocistom bacene karte
+                    iscrtajKartu(kartuIzvucenuAI,ctx,500,60);
+                    iscrtajKartu(kartaIzvucenaIgrac,ctx,500,260);
+                }, 6000); 
 
             }
             //***********************************************************************************************************************
@@ -50,31 +80,40 @@
                 $("#myCanvas").click(function(evt) {
                     var  mouseX = parseInt(evt.clientX - c.offsetLeft);
                     var mouseY = parseInt(evt.clientY-c.offsetTop + window.pageYOffset);
-                    chat.server.cardClick(mouseX,mouseY);
+                    hub.server.cardKlik(mouseX,mouseY);
                 });
 
             });
 
         });
 
+        function iscrtajKartu(karta , ctx , x ,y){
+            if(karta == null)
+                return;
+            var img = new Image();
+            img.src = karta.pathSlike;
+            img.onload = function(){
+                ctx.drawImage(img,x,y,karta.sirina,karta.visina);
+            }
+        }
         //dobije n karata i iscrta ih na platno ctx je referenca na platno
-        function nacrtajKarte(ruka , n , ctx){
+        function iscrtajRuku(ruka , ctx){
             var imgs = [];
             var imagesOK=0;
-            for(i=0;i<n;i++){
+            for(i=0;i<ruka.length;i++){
                 var karta = ruka[i];
                 var img = new Image();
                 imgs.push(img);
                 img.src = karta.pathSlike;
                 img.onload = function(){
                     imagesOK++;
-                    if (imagesOK>= n  ){
-                        for(j=0;j<n;j++)
-                            ctx.drawImage(imgs[j],parseInt(ruka[j].xPoz),590,parseInt(ruka[j].sirina),parseInt(ruka[j].visina));
-                    };
-                };
-            };
-        };
+                    if (imagesOK>= ruka.length  ){
+                        for(j=0;j<ruka.length;j++)
+                            ctx.drawImage(imgs[j],parseInt(ruka[j].xPoz),parseInt(ruka[j].yPoz),parseInt(ruka[j].sirina),parseInt(ruka[j].visina));
+                    }
+                }
+            }
+        }
     </script>
 
 }
