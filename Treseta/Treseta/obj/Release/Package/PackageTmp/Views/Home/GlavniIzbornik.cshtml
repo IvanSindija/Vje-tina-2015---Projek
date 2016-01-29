@@ -1,0 +1,17 @@
+﻿@model List<Treseta.Models.Room>
+<h2>Glavni Izbornik</h2>
+<div id="tipkice">
+    <button onclick="location.href='@Url.Action("SinglePlayer", "Home", new { korisnik = @ViewData["korisnik"] })'">Single Player</button>
+</div>
+<div id="sobe">
+    @foreach (var item in Model)
+    {
+        <div>
+            @if (item.brojIgraca < 4)
+            {
+                <button  onclick="location.href='@Url.Action("Partija", "Home", new { imeSobe = @item.imeSobe, korisnickoIme = @ViewData["korisnik"] })'">@item.imeSobe - Igraca u sobi: @item.brojIgraca / 4</button>
+            }
+        </div>
+    }
+</div>
+<link href="~/Content/GlavniIzbornik.css" rel="stylesheet" />
