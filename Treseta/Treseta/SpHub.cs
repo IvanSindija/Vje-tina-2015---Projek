@@ -176,7 +176,7 @@ namespace Treseta
             if (sobaOdlaska == null)
                 return base.OnDisconnected(x);
 
-            sobe.Remove(sobaOdlaska);//maknem sobu iz liste da nebude u memoriji bezveze
+            sobe.Remove(sobaOdlaska);//maknem sobu iz liste da ne koristi memoriju bez razloga
 
             return base.OnDisconnected(x);
 
