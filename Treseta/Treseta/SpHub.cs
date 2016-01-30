@@ -18,12 +18,8 @@ namespace Treseta
             Spil spil = new Spil();
             //dajemo karte igracu ******************************************
             novaSoba.Igrac.mojeKarte = spil.getDesteKarat();
-            novaSoba.Igrac.mojeKarte.Sort();//poslozimo ih da budu u redosljedu u ruci
-            for (int j = 0; j < 10; j++)
-            {
-                novaSoba.Igrac.mojeKarte.ElementAt(j).xPoz = 80 + j * 90;//određujemo im kordinatu u ruci y=590
-            }
             //****************************************************************
+            sortRuku(novaSoba);
             novaSoba.karteU_RuciAI = spil.getDesteKarat();//dali smo karte AI
             novaSoba.spilIgre = spil;
             spSobe.Add(novaSoba);
@@ -31,44 +27,138 @@ namespace Treseta
             Clients.Client(connectionId).pocetakIgre(novaSoba.Igrac.mojeKarte); //igracu saljem njegove karte da ih iscrta
         }
 
+        private void sortRuku(SpSoba sobaIgre)
+        {
+            sobaIgre.Igrac.mojeKarte.Sort();//poslozimo ih da budu u redosljedu u ruci
+            for (int j = 0; j < sobaIgre.Igrac.mojeKarte.Count; j++)
+            {
+                sobaIgre.Igrac.mojeKarte.ElementAt(j).xPoz = 50 + j * 140 / 2;
+                sobaIgre.Igrac.mojeKarte.ElementAt(j).yPoz = 500;
+            }
 
-        //za Babana implementirati !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //imas nesto slicno u MultiplayerHub funkcija se zove isto cardClick pa ako nesto neznas tamo mos pogledati
-        public void cardKlik(int x , int y)
+        }
+
+        //odredi koja je bacena karta iz kordinate klika
+        private Karta getKliknutaKarta(SpSoba sobaIgre, int mouseX, int mouseY)
+        {
+            for (int i = sobaIgre.Igrac.mojeKarte.Count - 1; i >= 0; i--)
+            {
+                Karta temp = sobaIgre.Igrac.mojeKarte.ElementAt(i);//karta za provjeru ide od najvise prema najnizoj
+                if (temp.xPoz < mouseX && (temp.xPoz + temp.sirina) > mouseX && temp.yPoz < mouseY && temp.yPoz + temp.visina > mouseY)//kliknuta je ova karta
+                {
+                    return temp;
+                }
+            }
+            return null;
+        }
+
+        //bacanje karte 
+        private void baciKartu(SpSoba sobaIgre, Karta igracevoBacanje, int istoZvanje, string connectionId)
+        {
+            sobaIgre.Igrac.mojeKarte.Remove(igracevoBacanje);
+            Karta jacaKarta = sobaIgre.baceneKartaAI.tkoJeJaci(igracevoBacanje);
+            Karta kartuIzvucenuAI = sobaIgre.spilIgre.getKarta();
+            Karta kataIzvucenaIgrac = sobaIgre.spilIgre.getKarta();
+            sobaIgre.odbaceneKarte.Add(igracevoBacanje);
+            sobaIgre.odbaceneKarte.Add(sobaIgre.baceneKartaAI);
+            int bodovi = sobaIgre.baceneKartaAI.bodovi + igracevoBacanje.bodovi;
+            if (jacaKarta.Equals(sobaIgre.baceneKartaAI) || istoZvanje == 1)//1 odgovorio je krivim zvanjem
+            {
+                sobaIgre.AIjeigrao = 1;
+                sobaIgre.bodoviAi += bodovi;
+            }
+            if (jacaKarta.Equals(igracevoBacanje))
+            {
+                sobaIgre.bodoviIgraca += bodovi;
+            }
+            Clients.Client(connectionId).odgovor(sobaIgre.Igrac.mojeKarte, igracevoBacanje, kartuIzvucenuAI, kataIzvucenaIgrac);
+            if (kataIzvucenaIgrac != null)
+                sobaIgre.Igrac.mojeKarte.Add(kataIzvucenaIgrac);
+            sortRuku(sobaIgre);
+            if (kartuIzvucenuAI != null)
+                sobaIgre.karteU_RuciAI.Add(kartuIzvucenuAI);
+        }
+
+        public void cardKlik(int x, int y)
         {
             var connectionId = Context.ConnectionId;
-            SpSoba sobaIgre = ListaSPsoba.dohvatiListuSoba().Find(t=> t.Igrac.connectioId.Equals(connectionId));//soba u kojoj se igra
-            //dobio si kordinatu klika od igraca
-            //ako je AI prvi na potezu goTo velikaSlovaAi
-            //provjeris jeli kliknuta karta 
-            // provjeri jeli igrac smije baciti tu kartu ako nesmije posaljes mu upozorenje
-            Clients.Client(connectionId).upozoenje("Nesmijes tu kartu igrati");
-            //odredi koju kartu baca ai pomocu SpSoba.aiVraca kartu tu funkciju moras implementirati
-            //makni iz ruke igraca i ai-a kartu koju su bacili
-            //ovime zavrsava određivanje koju kartu baca igrac i koju baca AI*****************************************************
-            //odredi tko je bacio jacu kartu karta ti ima lokalnu varjablu sanga i zvanje
-            //dodaj bodove onome tko je digao to bacanje
-            //odredi tko igra prvi sljedeci krug imas tu varjablu u sobi igre
-            //ovime zavrsava određivanje pobjednika kruga i dodjela bodova*******************************************************
-            //dohvati 1 kartu za igraca i 1 za ai iz spila postoji ti vec funkcija za to
-            //dodaj tu kartu sto su izvukli u ruku im onda sortiraj ruku i unesi im opet kordinate
-            //posalji novu rukuIgraca, kartuBacenuOdIgraca, kartuBacenuOdAI, kartuIzvucenuAI, kataIzvucenaIgrac
-            // Clients.Client(connectionId).noviKrug(rukuIgraca, kartuBacenuOdIgraca, kartuBacenuOdAI, kartuIzvucenuAI, kataIzvucenaIgrac);
-            //s ovime zavrsava sljanje kresi podataka za iscrtavanje*************************************************************
-            System.Threading.Thread.Sleep(5000);//zaustavim dretvu 5 sec
-            //ako je sada ai i potezu odredi koju ce kartu ai baciti i posaljes to i makni mu tu kartu iz ruke
-            //ako ai nje na potezu samo return; napisi i ovo dalje se nece izvoditi
-            //Clients.Client(connectionId).aiIgra(karta);
-            //VELIKASLOVAAI!!!!!!!!!!!!!!!!!!!
-            //tu si ako je ai bio prvi na potezu i igrac odgovara klikom
-            ////provjeris jeli kliknuta karta 
-            // provjeri jeli igrac smije baciti tu kartu ako nesmije posaljes mu upozorenje
-            Clients.Client(connectionId).upozoenje("Nesmijes tu kartu igrati");
-            //makni iz ruke igraca kartu koju je bacio
-            //bla bla nove karte u ruku bla bla ko igra prvi bla bla
-            //Clients.Client(connectionId).odgovor(rukuIgraca, kartuBacenuOdIgraca,kartuIzvucenuAI, kataIzvucenaIgrac);
-            //i mislim da je to to
+            SpSoba sobaIgre = ListaSPsoba.dohvatiListuSoba().Find(t => t.Igrac.connectioId.Equals(connectionId));//soba u kojoj se igra
+            if (sobaIgre.obrada == 1)//obraduje se logika
+                return;
+
+            sobaIgre.obrada = 1;
+            Karta kliknutaKarta = getKliknutaKarta(sobaIgre, x, y);
+            if (kliknutaKarta == null)
+            {
+                sobaIgre.obrada = 0;
+                return;
+            }
+            //igrac odgovara na bacanje od ai
+            if (sobaIgre.AIjeigrao == 1)
+            {
+                sobaIgre.AIjeigrao = 0;
+                if (sobaIgre.baceneKartaAI.zvanje.Equals(kliknutaKarta.zvanje))
+                {
+                    baciKartu(sobaIgre, kliknutaKarta, 0, connectionId);
+                }
+                else
+                {
+                    int brojKarata = sobaIgre.Igrac.mojeKarte.Count(z => z.zvanje.Equals(sobaIgre.baceneKartaAI.zvanje));
+                    if (brojKarata > 0)
+                    {
+                        Clients.Client(connectionId).upozorenje("Moras odgovarati na zvanje");
+                        sobaIgre.obrada = 0;
+                        return;
+                    }
+                    baciKartu(sobaIgre, kliknutaKarta, 1, connectionId);
+                }
+                System.Threading.Thread.Sleep(10000);
+                sobaIgre.obrada = 0;
+            }
+            else//igrac prvi baca smije baciti sto god hoce nije potrebno paziti zvanje
+            {
+
+                Karta aiVraca = sobaIgre.aiVracaKartu(kliknutaKarta);//ai odgovara na bacenu kartu 
+                sobaIgre.Igrac.mojeKarte.Remove(kliknutaKarta);//micemo iz ruke kliknutu kartu
+                sobaIgre.karteU_RuciAI.Remove(aiVraca);
+                Karta jacaKarta = kliknutaKarta.tkoJeJaci(aiVraca);
+                Karta kartuIzvucenuAI = sobaIgre.spilIgre.getKarta();
+                Karta kataIzvucenaIgrac = sobaIgre.spilIgre.getKarta();
+                sobaIgre.odbaceneKarte.Add(kliknutaKarta);
+                sobaIgre.odbaceneKarte.Add(aiVraca);
+                int bodovi = aiVraca.bodovi + kliknutaKarta.bodovi;
+                if (jacaKarta.Equals(aiVraca))
+                {
+                    sobaIgre.AIjeigrao = 1;
+                    sobaIgre.bodoviAi += bodovi;
+                }
+                if (jacaKarta.Equals(kliknutaKarta))
+                {
+                    sobaIgre.bodoviIgraca += bodovi;
+                }
+                Clients.Client(connectionId).noviKrug(sobaIgre.Igrac.mojeKarte, kliknutaKarta, aiVraca, kartuIzvucenuAI, kataIzvucenaIgrac);
+                System.Threading.Thread.Sleep(10000);
+                if (kataIzvucenaIgrac != null)
+                    sobaIgre.Igrac.mojeKarte.Add(kataIzvucenaIgrac);
+                sortRuku(sobaIgre);
+                if (kartuIzvucenuAI != null)
+                    sobaIgre.karteU_RuciAI.Add(kartuIzvucenuAI);
+            }
+            Clients.Client(connectionId).novaRuka(sobaIgre.Igrac.mojeKarte);
+            if (sobaIgre.AIjeigrao == 1)
+            {
+                sobaIgre.baceneKartaAI = sobaIgre.aiBacaPrvi();
+                sobaIgre.karteU_RuciAI.Remove(sobaIgre.baceneKartaAI);//bacio sam kartu i maknuo je iz ruke ai-ja
+                Clients.Client(connectionId).aiIgra(sobaIgre.baceneKartaAI);
+            }
+            sobaIgre.obrada = 0;
+            if (sobaIgre.Igrac.mojeKarte.Count == 0)
+            {
+                Clients.Client(connectionId).krajIgre("AI bodovi" + (sobaIgre.bodoviAi / 3).ToString() + " tvoji bodovi" + (sobaIgre.bodoviIgraca / 3).ToString());
+            }
+
         }
+
 
         /// <summary>
         /// pozove se kad igrac izađe iz sobe za igru
