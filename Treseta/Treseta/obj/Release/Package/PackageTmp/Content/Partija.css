@@ -1,0 +1,47 @@
+﻿h1 {
+    color: #742ECC;
+    text-align: center;
+}
+
+body{
+    background-image : url(http://www.tucepihotelalga.com/EasyEdit/UserFiles/PageImages/relax-croatia-tucepi-bluesun-hotel-alga/relax-croatia-tucepi-bluesun-hotel-alga-635665086529616797_570_320.jpeg);
+    background-size:100%;
+}
+
+canvas{
+    background-image: url(http://i.stack.imgur.com/jGlzr.png);
+    position:absolute;
+    top:5%;
+    left:33%;
+}
+
+label[id=igrac1]{
+    color: red; 
+    font-size:large;
+    transform: translateY(-350px) rotate(-90deg);
+    position:absolute;
+    left:30%;
+    top:89%;
+}
+
+ label[id=igrac3]{
+    color: red; 
+    font-size:large;
+    transform:translateY(-350px) rotate(90deg);
+    position:absolute;
+    left :87%;
+    top:90%;
+    }
+
+h3[id=igrac2]{
+    color: blue;
+    position:absolute;
+    left:55%;
+    top:-1%;  
+}
+h3[id=igrac0]{
+    color:blue;
+    position:absolute;
+    left:55%;
+    top:93%;
+}
