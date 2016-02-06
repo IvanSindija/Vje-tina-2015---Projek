@@ -48,3 +48,4 @@ D:\a3godina\C#projekt\Treseta\Treseta\bin\Antlr3.Runtime.pdb
 D:\a3godina\C#projekt\Treseta\Treseta\bin\Newtonsoft.Json.xml
 D:\a3godina\C#projekt\Treseta\Treseta\obj\Release\Treseta.dll
 D:\a3godina\C#projekt\Treseta\Treseta\obj\Release\Treseta.pdb
+D:\a3godina\C#projekt\Treseta\Treseta\obj\Release\Treseta.csprojResolveAssemblyReference.cache

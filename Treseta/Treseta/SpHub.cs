@@ -145,6 +145,11 @@ namespace Treseta
                     sobaIgre.karteU_RuciAI.Add(kartuIzvucenuAI);
             }
             Clients.Client(connectionId).novaRuka(sobaIgre.Igrac.mojeKarte);
+            if (sobaIgre.Igrac.mojeKarte.Count == 0)
+            {
+                Clients.Client(connectionId).krajIgre("AI bodovi" + (sobaIgre.bodoviAi / 3).ToString() + " tvoji bodovi" + (sobaIgre.bodoviIgraca / 3).ToString());
+            }
+
             if (sobaIgre.AIjeigrao == 1)
             {
                 sobaIgre.baceneKartaAI = sobaIgre.aiBacaPrvi();
@@ -152,10 +157,6 @@ namespace Treseta
                 Clients.Client(connectionId).aiIgra(sobaIgre.baceneKartaAI);
             }
             sobaIgre.obrada = 0;
-            if (sobaIgre.Igrac.mojeKarte.Count == 0)
-            {
-                Clients.Client(connectionId).krajIgre("AI bodovi" + (sobaIgre.bodoviAi / 3).ToString() + " tvoji bodovi" + (sobaIgre.bodoviIgraca / 3).ToString());
-            }
 
         }
 
